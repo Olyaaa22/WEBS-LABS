@@ -1,0 +1,11 @@
+POST /LR1/ HTTP/1.1
+Host:  volgu.ivdev.ru
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 19
+X-Intervolga-1: 7cd32630594e38b1f98e541758faa806
+name=olya&group=311
+
+
+HEAD /LR1/ HTTP/1.1
+Host: volgu.ivdev.ru
+
