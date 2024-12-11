@@ -1,0 +1,108 @@
+<?php
+session_start();
+
+// Credentials
+$my_email = "ooooolka@vk.com";
+$my_pass = "2003";
+
+// Handling logout
+if (isset($_GET["logout"]) && $_GET['logout'] === "yes") {
+    session_unset();
+    session_destroy();
+    header("Location: /");
+    exit;
+}
+
+// Handling login
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $user_email = $_POST['email'] ?? '';
+    $user_pass = $_POST['pass'] ?? '';
+
+    if ($user_email === $my_email && $user_pass === $my_pass) {
+        $_SESSION['username'] = $user_email;
+        $_SESSION['authenticated'] = true;
+        header("Location: /");
+        exit;
+    } else {
+        $error_message = "Invalid email or password.";
+    }
+}
+
+$is_authenticated = $_SESSION['authenticated'] ?? false;
+?>
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Session Demo - Hatsune Miku Style</title>
+    <style>
+        body {
+            background-color: #f0f8ff;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .btn-primary {
+            background-color: #39c5bb;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #28a9a1;
+        }
+        .btn-danger {
+            background-color: #ff6699;
+            border: none;
+        }
+        .btn-danger:hover {
+            background-color: #e05588;
+        }
+        h2 {
+            color: #39c5bb;
+        }
+        .form-label {
+            color: #666;
+        }
+        .alert-danger {
+            background-color: #ffe6e6;
+            color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <?php if (!$is_authenticated): ?>
+                <h2 class="text-center">Login</h2>
+                <?php if (!empty($error_message)): ?>
+                    <div class="alert alert-danger" role="alert">
+                        <?= htmlspecialchars($error_message) ?>
+                    </div>
+                <?php endif; ?>
+                <form method="POST" action="/">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email address</label>
+                        <input type="email" name="email" class="form-control" id="email" placeholder="name@example.com" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" name="pass" class="form-control" id="password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                </form>
+            <?php else: ?>
+                <h2 class="text-center">Welcome</h2>
+                <p class="text-center">You are successfully logged in.</p>
+                <div class="text-center">
+                    <a href="/?logout=yes" class="btn btn-danger">Logout</a>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+</body>
+</html>
